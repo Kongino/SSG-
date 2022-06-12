@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- dao에서 선언된 함수들을 구현한 mapper -->
+<mapper namespace="com.ssg.shopping.dao.GoodsDao">
+	
+	<!-- 전체 상품 목록 -->
+	<select id="searchAll"	 resultType="Goods">
+		select * from goods
+	</select>
+	
+	<!-- 장바구니에 상품 추가 -->
+	<insert id="insertBasket" parameterType="int">
+		insert ignore into basket (goodsno) values (#{no}) 
+	</insert>
+	
+	<!-- 장바구니 목록 -->
+	<select id="searchBasket" resultType="Goods">
+		select distinct * from goods, basket where no=goodsno group by goodsno order by groupname 
+	</select>
+	
+	<!-- 장바구니에서 상품 삭제 -->
+	<delete id="deleteBasket" parameterType="int">
+		delete from basket where goodsno = #{no}
+	</delete>
+	
+	<!-- 장바구니에서 선택된 상품들의 개수 -->
+	<select id="countSelect" resultType = "int">
+		select count(*) from basket where selected = 1 
+	</select>
+	
+	<!-- 선택된 상품이 있을 경우의 합계 금액 -->
+	<select id="priceSelect" resultType = "int">
+		select sum(price*amount) from goods, basket where no=goodsno and selected = 1 
+	</select>
+	
+	<!-- 선택된 상품이 없을 경우 장바구니에 담긴 모든 상품들의 합계 금액 -->
+	<select id="priceAll" resultType="int">
+		select sum(price*amount) from goods, basket where no=goodsno  
+	</select>
+	
+	<!-- 상품 선택 처리 -->
+	<update id="selectOn" parameterType="int">
+		update basket set selected=1 where goodsno = #{no} 
+	</update>
+	
+	<!-- 상품 선택 해제 처리 -->
+	<update id="selectOff" parameterType="int">
+		update basket set selected=0 where goodsno = #{no} 
+	</update>
+	
+	<!-- 상품 구매수량 변경 -->
+	<update id="changeAmount" parameterType="int">
+		update basket set amount=#{val} where goodsno=#{no}
+	</update>
+	
+	<!-- 선택한 상품이 있을 경우의 구매 처리(goods 테이블에서 재고 감소) -->
+	<update id="purchase">
+		update goods, basket set stock=stock-amount where no=goodsno and selected=1;
+	</update>
+	
+	<!-- 선택한 상품이 있을 경우의 구매 처리(구매한 상품을 장바구니에서 삭제) -->
+	<delete id="deleteSelect">
+		delete from basket where selected=1 
+	</delete>
+	
+	<!-- 선택한 상품이 없을 경우(전체 선택)의 구매 처리(goods 테이블에서 재고 감소) -->
+	<update id="purchaseAll">
+		update goods, basket set stock=stock-amount where no=goodsno
+	</update>
+	
+	<!-- 선택한 상품이 없을 경우(전체 선택)의 구매 처리(구매한 상품을 장바구니에서 삭제) -->
+	<delete id="deleteAll">
+		delete from basket
+	</delete>
+	
+</mapper>
+
+

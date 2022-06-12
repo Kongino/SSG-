@@ -1,0 +1,49 @@
+.dataTbl {
+  font-family: "맑은 고딕";
+  font-size: 0.9em;
+  color: #666;
+}
+a {
+  text-decoration: none;
+  color: #09f;
+}
+a:hover {
+  text-decoration: underline;
+}
+caption {
+  display: none; /*안보이게 설정, 
+                          화면에 보이지는 않지만 스크린리더리로 읽어짐.*/
+}
+table {
+  width: 800px;
+  border-collapse: collapse;
+  border-top: 2px solid #8d8d8d;
+}
+th {
+  padding: 10px 8px; /*padding: vertical horizontal;*/
+  background: #f9f9f9;
+  color: #666;
+  border-bottom: 1px solid #8d8d8d;
+}
+
+td {
+  padding: 10px 8px; /*padding: vertical horizontal;*/
+  text-align: center;
+  line-height: 1.25em;
+  color: #666;
+  border-bottom: 1px solid #8d8d8d;
+}
+
+td.article {
+  /*article 클래스가 적용된 열만 좌측 정렬*/
+  text-align: left;
+}
+.modal {
+  display: none;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color: #fefefe;
+  border: 1px solid #888;
+  border-radius: 3px;
+}
